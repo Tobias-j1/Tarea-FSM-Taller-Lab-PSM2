@@ -117,44 +117,57 @@ int main(void)
 		if (bandera==0)
 		{
 			//Led Rojo
-			HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, 1);
+			HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, 1);//Estado off
 			//Led Verde
-			HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 0);
+			HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 0);//Esatado On
 		}
+		/*Condicion de inicio maquina de estado que la bandera este en el estado incial
+		  y que se accione alguno de los dos pulsadores*/
 		if (bandera==0 && (HAL_GPIO_ReadPin(SW_1_GPIO_Port, SW_1_Pin) || HAL_GPIO_ReadPin(SW_2_GPIO_Port, SW_2_Pin)))
 		{
 			//Led Verde
 			HAL_GPIO_TogglePin(LED_2_GPIO_Port, LED_2_Pin);
+			//Tiempo de 200 milisegundos
 			timer_start(&tick, 200);
 			bandera++;
 		}
+		//Se Cuenta 5 veces las intermitencias de 200ms equivalentes
+		//A los 1 segundo solicitado
 		if (bandera>0 && bandera<6 && timer_has_expired(&tick))
 		{
 			//Led Verde
-			HAL_GPIO_TogglePin(LED_2_GPIO_Port, LED_2_Pin);
+			HAL_GPIO_TogglePin(LED_2_GPIO_Port, LED_2_Pin);//Parpadeo
+
+			//Se resetea para tomar el nuevo tiempo y para garantizar el correcto
+			//funcionamiento de la maquina de estado
 			timer_restart(&tick);
 			bandera++;
 		}
 		if(bandera==6)
 		{
 			//Led Rojo
-			HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, 0);
+			HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, 0); //Led on
 			//Led Verde
-			HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 1);
+			HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 1); //Led off
 			timer_restart(&tick);
-			timer_update_duration(&tick, 3000);
+			timer_update_duration(&tick, 3000); //Se cambia el tiempo del timer en 3 segundos para el
+			//led rojo
 			bandera++;
 		}
 		if (bandera==7 && timer_has_expired(&tick))
 		{
 			//Led Rojo
-			HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
+			HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin); //Parpadeo del led rojo
 
 			timer_restart(&tick);
+
+			//Se cambia de vuelta el periodo del timer correspondiente a la
+			//Intermitencia del led rojo
 			timer_update_duration(&tick, 200);
+
 			bandera++;
 		}
-		if(bandera>7 && bandera<12 && timer_has_expired(&tick))
+		if(bandera>7 && bandera<12 && timer_has_expired(&tick)) //Condicion de los 1 segundos de intermitencia
 		{
 			//Led Rojo
 			HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
@@ -163,6 +176,7 @@ int main(void)
 		}
 		if(bandera==12)
 		{
+			//Vuelta al estado inicial
 			bandera=0;
 		}
 
