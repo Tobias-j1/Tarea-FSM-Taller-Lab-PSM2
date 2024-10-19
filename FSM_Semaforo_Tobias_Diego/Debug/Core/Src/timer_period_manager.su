@@ -1,0 +1,6 @@
+../Core/Src/timer_period_manager.c:4:12:rising_edge_detected	24	static
+../Core/Src/timer_period_manager.c:10:6:on_state_period_1	24	static
+../Core/Src/timer_period_manager.c:15:6:on_state_period_2	24	static
+../Core/Src/timer_period_manager.c:20:6:on_state_period_3	24	static
+../Core/Src/timer_period_manager.c:46:6:timer_period_manager_init	24	static
+../Core/Src/timer_period_manager.c:58:6:timer_period_manager_update	16	static
