@@ -22,7 +22,10 @@ Core/Src/modulo_ejemplo.o: ../Core/Src/modulo_ejemplo.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h \
- ../Core/Inc/fsm.h ../Core/Inc/timer.h
+ ../Core/Inc/fsm.h ../Core/Inc/timer.h ../Core/Inc/blink_control.h \
+ ../Core/Inc/timer.h ../Core/Inc/main.h ../Core/Inc/blink_control.h \
+ ../Core/Inc/timer_period_manager.h ../Core/Inc/edge_detector.h \
+ ../Core/Inc/debouncer.h
 ../Core/Inc/modulo_ejemplo.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
@@ -49,3 +52,10 @@ Core/Src/modulo_ejemplo.o: ../Core/Src/modulo_ejemplo.c \
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h:
 ../Core/Inc/fsm.h:
 ../Core/Inc/timer.h:
+../Core/Inc/blink_control.h:
+../Core/Inc/timer.h:
+../Core/Inc/main.h:
+../Core/Inc/blink_control.h:
+../Core/Inc/timer_period_manager.h:
+../Core/Inc/edge_detector.h:
+../Core/Inc/debouncer.h:

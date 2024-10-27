@@ -19,10 +19,13 @@ typedef enum {
 
 // Structure to hold the BlinkControl FSM and associated data
 typedef struct {
+
     FSM fsm;               // FSM instance for LED blinking
     Timer blink_timer;      // Timer for LED blink period
     GPIO_TypeDef *LED_Port; // GPIO port for the LED
     uint16_t LED_Pin;       // GPIO pin for the LED
+    uint16_t blink_state;
+
 } BlinkControl;
 
 // PUBLIC FUNCTIONS
@@ -35,6 +38,10 @@ typedef struct {
  * @param LED_Pin GPIO pin of the LED.
  * @param blink_period Blink period in milliseconds.
  */
+void Bandera_Apaga_timer(void *context);
+
+void Bandera_Enciende_timer(void *context);
+
 void blink_control_init(BlinkControl *blink_control, GPIO_TypeDef *LED_Port, uint16_t LED_Pin, uint32_t blink_period);
 
 /**

@@ -1,8 +1,8 @@
-../Core/Src/modulo_ejemplo.c:20:12:condicion_estado1_a_estado2	24	static
-../Core/Src/modulo_ejemplo.c:31:12:condicion_estado2_a_estado3	24	static
-../Core/Src/modulo_ejemplo.c:39:12:condicion_estado2_a_estado1	24	static
-../Core/Src/modulo_ejemplo.c:48:12:condicion_estado3_a_estado1	24	static
-../Core/Src/modulo_ejemplo.c:62:6:on_state_estado1	24	static
-../Core/Src/modulo_ejemplo.c:71:6:on_state_estado2	24	static
-../Core/Src/modulo_ejemplo.c:127:6:modulo_ejemplo_init	24	static
-../Core/Src/modulo_ejemplo.c:146:6:modulo_ejemplo_update	16	static
+../Core/Src/modulo_ejemplo.c:31:12:condicion_estado1_a_estado2	24	static
+../Core/Src/modulo_ejemplo.c:42:12:condicion_timer_expired	24	static
+../Core/Src/modulo_ejemplo.c:58:6:on_state_estado1	24	static
+../Core/Src/modulo_ejemplo.c:68:6:on_state_estado2	24	static
+../Core/Src/modulo_ejemplo.c:78:6:on_state_estado3	24	static
+../Core/Src/modulo_ejemplo.c:87:6:on_state_estado4	24	static
+../Core/Src/modulo_ejemplo.c:152:6:modulo_ejemplo_init	24	static
+../Core/Src/modulo_ejemplo.c:186:6:modulo_ejemplo_update	16	static

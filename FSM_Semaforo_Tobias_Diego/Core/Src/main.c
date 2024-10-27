@@ -24,10 +24,11 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "blink_control.h"
-#include "timer_period_manager.h"
+//#include "blink_control.h"
+//#include "timer_period_manager.h"
 #include "timer.h"
-
+#include "modulo_ejemplo.h"
+#include "blink_control.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -49,13 +50,16 @@
 
 /* USER CODE BEGIN PV */
 // Low-power mode aids
-Timer tick,sys_tick_2;
-unsigned int bandera=0;
+//Timer tick,sys_tick_2;
+//unsigned int bandera=0;
 
-DebouncedSwitch debounced_button1, debounced_button2;
-EdgeDetector edge_detector1, edge_detector2;
-BlinkControl blink_control_led1, blink_control_led2;
-TimerPeriodManager period_manager1, period_manager2;
+//DebouncedSwitch debounced_button1, debounced_button2;
+//EdgeDetector edge_detector1, edge_detector2;
+//TimerPeriodManager period_manager1, period_manager2;
+
+ModuloEjemplo proyecto1;
+
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -99,14 +103,16 @@ int main(void)
 	/* Initialize all configured peripherals */
 	MX_GPIO_Init();
 	/* USER CODE BEGIN 2 */
-	debounced_switch_init(&debounced_button1, SW_1_GPIO_Port, SW_1_Pin);
-	debounced_switch_init(&debounced_button2, SW_2_GPIO_Port, SW_2_Pin);
-	blink_control_init(&blink_control_led1, LED_1_GPIO_Port, LED_1_Pin, 0);
-	blink_control_init(&blink_control_led2, LED_2_GPIO_Port, LED_2_Pin, 0);
-	edge_detector_init(&edge_detector1, &debounced_button1);
-	edge_detector_init(&edge_detector2, &debounced_button2);
-	timer_period_manager_init(&period_manager1, &blink_control_led1.blink_timer, &edge_detector1);
-	timer_period_manager_init(&period_manager2, &blink_control_led2.blink_timer, &edge_detector2);
+	//	debounced_switch_init(&debounced_button1, SW_1_GPIO_Port, SW_1_Pin);
+	//	debounced_switch_init(&debounced_button2, SW_2_GPIO_Port, SW_2_Pin);
+	//	edge_detector_init(&edge_detector1, &debounced_button1);
+	//	edge_detector_init(&edge_detector2, &debounced_button2);
+	//	timer_period_manager_init(&period_manager1, &blink_control_led1.blink_timer, &edge_detector1);
+	//	timer_period_manager_init(&period_manager2, &blink_control_led1.blink_timer, &edge_detector2);
+	modulo_ejemplo_init(&proyecto1, LED_1_GPIO_Port, LED_1_Pin, LED_2_GPIO_Port, LED_2_Pin, SW_1_GPIO_Port, SW_1_Pin, SW_2_GPIO_Port, SW_2_Pin);
+
+	HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, 1);
+	HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 0);
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -114,80 +120,11 @@ int main(void)
 	while (1)
 	{
 
-		if (bandera==0)
-		{
-			//Led Rojo
-			HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, 1);//Estado off
-			//Led Verde
-			HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 0);//Esatado On
-		}
-		/*Condicion de inicio maquina de estado que la bandera este en el estado incial
-		  y que se accione alguno de los dos pulsadores*/
-		if (bandera==0 && (HAL_GPIO_ReadPin(SW_1_GPIO_Port, SW_1_Pin) || HAL_GPIO_ReadPin(SW_2_GPIO_Port, SW_2_Pin)))
-		{
-			//Led Verde
-			HAL_GPIO_TogglePin(LED_2_GPIO_Port, LED_2_Pin);
-			//Tiempo de 200 milisegundos
-			timer_start(&tick, 200);
-			bandera++;
-		}
-		//Se Cuenta 5 veces las intermitencias de 200ms equivalentes
-		//A los 1 segundo solicitado
-		if (bandera>0 && bandera<6 && timer_has_expired(&tick))
-		{
-			//Led Verde
-			HAL_GPIO_TogglePin(LED_2_GPIO_Port, LED_2_Pin);//Parpadeo
+		modulo_ejemplo_update(&proyecto1);
 
-			//Se resetea para tomar el nuevo tiempo y para garantizar el correcto
-			//funcionamiento de la maquina de estado
-			timer_restart(&tick);
-			bandera++;
-		}
-		if(bandera==6)
-		{
-			//Led Rojo
-			HAL_GPIO_WritePin(LED_1_GPIO_Port, LED_1_Pin, 0); //Led on
-			//Led Verde
-			HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, 1); //Led off
-			timer_restart(&tick);
-			timer_update_duration(&tick, 3000); //Se cambia el tiempo del timer en 3 segundos para el
-			//led rojo
-			bandera++;
-		}
-		if (bandera==7 && timer_has_expired(&tick))
-		{
-			//Led Rojo
-			HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin); //Parpadeo del led rojo
-
-			timer_restart(&tick);
-
-			//Se cambia de vuelta el periodo del timer correspondiente a la
-			//Intermitencia del led rojo
-			timer_update_duration(&tick, 200);
-
-			bandera++;
-		}
-		if(bandera>7 && bandera<12 && timer_has_expired(&tick)) //Condicion de los 1 segundos de intermitencia
-		{
-			//Led Rojo
-			HAL_GPIO_TogglePin(LED_1_GPIO_Port, LED_1_Pin);
-			timer_restart(&tick);
-			bandera++;
-		}
-		if(bandera==12)
-		{
-			//Vuelta al estado inicial
-			bandera=0;
-		}
-
-
-		// Put the processor to sleep during the remaining time until the tick rate is reached,
-		// this allows us to save energy from otherwise wasted CPU cycles. The systick will wake up
-		// the processor once every millisecond, and then be back to sleep again, this process will
-		// repeat until the timer expires. Then our tasks will run again one time, and so on.
-		while(!timer_has_expired(&tick)) {
-			HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
-		}
+		//		while(!timer_has_expired(&tick)) {
+		//			HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
+		//		}
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */

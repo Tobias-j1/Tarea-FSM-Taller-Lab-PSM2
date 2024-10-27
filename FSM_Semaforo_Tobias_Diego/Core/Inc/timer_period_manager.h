@@ -13,7 +13,7 @@ typedef enum {
 } TimerPeriodFSMState;
 
 // Define the period durations (in milliseconds)
-#define PERIOD_1 100   // First period duration
+#define PERIOD_1 200   // First period duration
 #define PERIOD_2 500   // Second period duration
 #define PERIOD_3 1000  // Third period duration
 
